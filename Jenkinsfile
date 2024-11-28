@@ -3,7 +3,6 @@ pipeline {
 
     tools {
         jdk 'jdk17'        // Use JDK version 11 or configure as per your setup
-        maven 'Maven3'     // Maven tool configuration in Jenkins
     }
 
     environment {
@@ -31,6 +30,13 @@ pipeline {
                         -Dsonar.login=squ_27b6550f9430cc6cfbcb42b7f7744658d2ac0ca8
                     """
                 }
+            }
+        }
+
+        stage('OWASP Dependency Check') {
+            steps {
+                dependencyCheck additionalArguments: "--project 'JenkinsSonarQubeDocker' --scan . --nvdApiKey 648e64d6-0fbd-45b3-af20-d3a741849232",
+                                odcInstallation: 'DependencyCheck'
             }
         }
 
