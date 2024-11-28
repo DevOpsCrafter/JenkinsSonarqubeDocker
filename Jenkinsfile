@@ -1,69 +1,50 @@
-pipeline {
-    agent any
+tools {
+    jdk 'jdk17'
+}
 
-    tools {
-        jdk 'jdk17'
-        maven 'Maven3'
+environment {
+    SCANNER_HOME = tool 'sonar-scanner'
+}
+
+stages {
+    stage('Git Checkout') {
+        steps {
+            git credentialsId: 'github', url: 'https://github.com/praguee/containerizing-portfolio.git'
+        }
     }
 
-    environment {
-        SCANNER_HOME = tool 'SonarQube Scanner'
+    stage('SonarQube Analysis') {
+        steps {
+            sh '''$SCANNER_HOME/bin/sonar-scanner \
+                  -Dsonar.projectKey=portfolio-website \
+                  -Dsonar.sources=. \
+                  -Dsonar.host.url=http://localhost:9000 \
+                  -Dsonar.login=<your-sonar-token>'''
+        }
     }
 
-    stages {
-        stage('Checkout Code') {
-            steps {
-                git credentialsId: 'github1', url: 'git@github.com:DevOpsCrafter/JenkinsSonarqubeDocker.git'
-            }
+    stage('OWASP Dependency Check') {
+        steps {
+            dependencyCheck additionalArguments: "--project 'Portfolio' --scan . --nvdApiKey <your-nvd-api-key>",
+                            odcInstallation: 'DependencyCheck'
         }
+    }
 
-
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') { // 'SonarQube' matches the name in Manage Jenkins → Configure System
-                    sh '''${SCANNER_HOME}/bin/sonar-scanner \
-                        -Dsonar.projectKey=portfolio-website \
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.login=squ_27b6550f9430cc6cfbcb42b7f7744658d2ac0ca8'''
+    stage('Build & Push Docker Image') {
+        steps {
+            script {
+                withDockerRegistry(credentialsId: 'Dockerhub') {
+                    sh "docker build -t portfolio:latest ."
+                    sh "docker tag portfolio:latest prrague/portfolio:latest"
+                    sh "docker push prrague/portfolio:latest"
                 }
             }
         }
+    }
 
-
-
-
-        stage('Dependency Check') {
-            steps {
-                dependencyCheck additionalArguments: "--project 'Portfolio' --scan .",
-                                odcInstallation: 'DependencyCheck'
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    docker.build('portfolio:latest')
-                }
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    withDockerRegistry([credentialsId: 'docker-hub-credentials']) {
-                        sh 'docker tag portfolio:latest acraterdevops/ScoreMe:latest'
-                        sh 'docker push acraterdevops/ScoreMe:latest'
-                    }
-                }
-            }
-        }
-
-        stage('Deploy to Staging') {
-            steps {
-                echo 'Deployment to staging environment'
-            }
+    stage('Trigger CD Pipeline') {
+        steps {
+            build job: 'CD pipeline', wait: true
         }
     }
 }
-
