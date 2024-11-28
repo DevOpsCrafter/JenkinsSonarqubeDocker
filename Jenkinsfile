@@ -23,7 +23,7 @@ pipeline {
                 ])
             }
         }
-    }
+    
    
 
         stage('SonarQube Analysis') {
@@ -73,5 +73,5 @@ pipeline {
             }
         }
     }
-
+}
 
