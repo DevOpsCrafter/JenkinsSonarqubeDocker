@@ -33,12 +33,34 @@ pipeline {
             }
         }
 
-        stage('OWASP Dependency Check') {
+        stage('Dependency Check') {
             steps {
-                dependencyCheck additionalArguments: "--project 'JenkinsSonarQubeDocker' --scan . --nvdApiKey 648e64d6-0fbd-45b3-af20-d3a741849232",
-                                odcInstallation: 'DependencyCheck'
+                script {
+                    // Get the path to the installed OWASP Dependency Check
+                    def dependencyCheckHome = tool name: 'OWASP-DC', type: 'org.jenkinsci.plugins.DependencyCheck.tools.DependencyCheckInstallation'
+
+                    // Run Dependency Check
+                    sh """
+                    ${dependencyCheckHome}/bin/dependency-check.sh --project JenkinsPipelineScan \
+                        --scan . \
+                        --out owasp-output \
+                        --format ALL
+                    """
+                }
+
+                // Archive and Publish the Report
+                archiveArtifacts artifacts: 'owasp-output/*.html', allowEmptyArchive: true
+                publishHTML(target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'owasp-output',
+                    reportFiles: 'dependency-check-report.html',
+                    reportName: 'OWASP Dependency Check Report'
+                ])
             }
         }
+
 
         // stage('Build with Maven') {
         //     steps {
