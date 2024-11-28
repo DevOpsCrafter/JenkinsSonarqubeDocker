@@ -17,15 +17,21 @@ pipeline {
             }
         }
 
+
         stage('SonarQube Analysis') {
             steps {
-                sh '''$SCANNER_HOME/bin/sonar-scanner \
-                      -Dsonar.projectKey=portfolio-website \
-                      -Dsonar.sources=. \
-                      -Dsonar.host.url=http://localhost:9000 \
-                      -Dsonar.login=squ_27b6550f9430cc6cfbcb42b7f7744658d2ac0ca8'''
+                withSonarQubeEnv('SonarQube') { // 'SonarQube' matches the name in Manage Jenkins → Configure System
+                    sh '''${SCANNER_HOME}/bin/sonar-scanner \
+                        -Dsonar.projectKey=portfolio-website \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=squ_27b6550f9430cc6cfbcb42b7f7744658d2ac0ca8'''
+                }
             }
         }
+
+
+
 
         stage('Dependency Check') {
             steps {
