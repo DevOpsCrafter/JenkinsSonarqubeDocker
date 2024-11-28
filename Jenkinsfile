@@ -60,7 +60,7 @@ pipeline {
                     reportName: 'OWASP Dependency Check Report'
                 ])
             }
-        }
+        
 
 
         // stage('Build with Maven') {
@@ -95,7 +95,7 @@ pipeline {
                 echo 'Deployment steps to staging or production environment go here.'
             }
         }
-    }
+    }}
 
     post {
         always {
