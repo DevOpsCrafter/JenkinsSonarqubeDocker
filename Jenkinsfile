@@ -41,7 +41,10 @@ pipeline {
 
                     // Run Dependency Check
                     sh """
-                    ${dependencyCheckHome}/bin/dependency-check.sh --project JenkinsPipelineScan \
+                    pwd
+                    ${dependencyCheckHome}/bin/dependency-check.sh --updateonly --nvdApiKey 648e64d6-0fbd-45b3-af20-d3a741849232
+                    mkdir -p /var/lib/jenkins/workspace/ScoreMe/owasp-output
+                    ${dependencyCheckHome}/bin/dependency-check.sh --nvdApiKey 648e64d6-0fbd-45b3-af20-d3a741849232 --project JenkinsPipelineScan \
                         --scan . \
                         --out owasp-output \
                         --format ALL
@@ -94,7 +97,18 @@ pipeline {
                 echo 'Deployment steps to staging or production environment go here.'
             }
         }
-    }
+    
+
+        stage('Docker Deploy To Container') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker-hub-credentials' ) {
+                        sh "docker run -dit -p 80:80 acraterdevops/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG}"
+                    }
+                }
+            }
+        }}
+
 
     post {
         always {
