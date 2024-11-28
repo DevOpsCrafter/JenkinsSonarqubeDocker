@@ -47,7 +47,7 @@ pipeline {
                         --out owasp-output \
                         --format ALL
                     """
-                }
+                }}
 
                 // Archive and Publish the Report
                 archiveArtifacts artifacts: 'owasp-output/*.html', allowEmptyArchive: true
@@ -103,4 +103,4 @@ pipeline {
         }
     }
 }
-}
+
