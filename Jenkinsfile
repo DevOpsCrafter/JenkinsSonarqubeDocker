@@ -12,18 +12,6 @@ pipeline {
 
 
     stages {
-        stage('Checkout Code') {
-            steps {
-                checkout([$class: 'GitSCM', 
-                    branches: [[name: '*/main']],
-                    userRemoteConfigs: [[
-                        url: 'https://DevOpsCrafter@github.com/DevOpsCrafter/JenkinsSonarqubeDocker.git', 
-                        credentialsId: 'github'
-                    ]]
-                ])
-            }
-        }
-    
    
 
         stage('SonarQube Analysis') {
