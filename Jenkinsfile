@@ -34,11 +34,11 @@ pipeline {
             }
         }
 
-        stage('Build with Maven') {
-            steps {
-                sh 'mvn clean package'
-            }
-        }
+        // stage('Build with Maven') {
+        //     steps {
+        //         sh 'mvn clean package'
+        //     }
+        // }
 
         stage('Build Docker Image') {
             steps {
