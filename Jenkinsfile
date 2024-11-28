@@ -3,6 +3,7 @@ pipeline {
 
     tools {
         jdk 'jdk17'        // Use JDK version 11 or configure as per your setup
+        OWASP-DC 'OWASP-DC'
     }
 
     environment {
