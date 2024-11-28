@@ -3,7 +3,6 @@ pipeline {
 
     tools {
         jdk 'jdk17'        // Use JDK version 11 or configure as per your setup
-        'OWASP-DC'
     }
 
     environment {
@@ -34,10 +33,11 @@ pipeline {
             }
         }
 
+    stages {
         stage('Dependency Check') {
             steps {
                 script {
-                    // Get the path to the installed OWASP Dependency Check
+                    // Reference the OWASP Dependency Check tool
                     def dependencyCheckHome = tool name: 'OWASP-DC', type: 'org.jenkinsci.plugins.DependencyCheck.tools.DependencyCheckInstallation'
 
                     // Run Dependency Check
