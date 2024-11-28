@@ -9,7 +9,7 @@ pipeline {
     environment {
         SCANNER_HOME = tool 'SonarQube' // SonarQube Scanner tool name in Jenkins
         DOCKER_CREDENTIALS = 'docker-hub-credentials' // Replace with your Docker Hub credentials ID
-        DOCKER_IMAGE_NAME = 'score' // Replace with your Docker image name
+        DOCKER_IMAGE_NAME = 'scoreme' // Replace with your Docker image name
         DOCKER_IMAGE_TAG = 'latest'
     }
 
@@ -53,7 +53,7 @@ pipeline {
                 script {
                     withDockerRegistry([credentialsId: env.DOCKER_CREDENTIALS]) {
                         sh """
-                        docker tag ${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG} your-dockerhub-repo/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG}
+                        docker tag ${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG} acraterdevops/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG}
                         docker push your-dockerhub-repo/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG}
                         """
                     }
