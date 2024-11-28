@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        jdk 'jdk17'        // Use JDK version 11 or configure as per your setup
+        jdk 'jdk17' // Use JDK version 17 or configure as per your setup
     }
 
     environment {
@@ -33,7 +33,6 @@ pipeline {
             }
         }
 
-    stages {
         stage('Dependency Check') {
             steps {
                 script {
@@ -47,7 +46,7 @@ pipeline {
                         --out owasp-output \
                         --format ALL
                     """
-                }}}
+                }
 
                 // Archive and Publish the Report
                 archiveArtifacts artifacts: 'owasp-output/*.html', allowEmptyArchive: true
@@ -60,9 +59,9 @@ pipeline {
                     reportName: 'OWASP Dependency Check Report'
                 ])
             }
-        
+        }
 
-
+        // Uncomment if Maven build is required
         // stage('Build with Maven') {
         //     steps {
         //         sh 'mvn clean package'
@@ -95,12 +94,12 @@ pipeline {
                 echo 'Deployment steps to staging or production environment go here.'
             }
         }
-    }}
+    }
 
     post {
         always {
             cleanWs() // Cleanup workspace
         }
     }
-
+}
 
