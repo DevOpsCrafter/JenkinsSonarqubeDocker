@@ -54,7 +54,7 @@ pipeline {
                     withDockerRegistry([credentialsId: env.DOCKER_CREDENTIALS]) {
                         sh """
                         docker tag ${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG} acraterdevops/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG}
-                        docker push your-dockerhub-repo/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG}
+                        docker push acraterdevops/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG}
                         """
                     }
                 }
