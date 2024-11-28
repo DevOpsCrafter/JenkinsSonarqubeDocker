@@ -23,7 +23,7 @@ pipeline {
                       -Dsonar.projectKey=portfolio-website \
                       -Dsonar.sources=. \
                       -Dsonar.host.url=http://localhost:9000 \
-                      -Dsonar.login=<your-sonar-token>'''
+                      -Dsonar.login=squ_27b6550f9430cc6cfbcb42b7f7744658d2ac0ca8'''
             }
         }
 
