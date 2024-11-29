@@ -167,6 +167,11 @@ The pipeline performs the following tasks:
 
 #### **Screenshots**  
 
+
+#### **Deployed Container**##
+![Screenshot 2024 11 29 at 7.14.14 AM](https://freeimghost.net/images/2024/11/28/Screenshot-2024-11-29-at-7.14.14AM.png)
+
+
 #### **SonarQube**##
 ![Screenshot 2024 11 29 at 1.55.50 AM](https://freeimghost.net/images/2024/11/28/Screenshot-2024-11-29-at-1.55.50AM.png)
 
